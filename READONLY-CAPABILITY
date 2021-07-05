@@ -1,0 +1,122 @@
+*************************************************************
+* The read-only mailbox access mode POP3 protocol extension *
+*************************************************************
+
+
+
+1.  Introduction
+
+    The POP3SF's implementation of the POP3 protocol offers a non-standard extension - read-only mailbox access mode.
+    In Section 4, RFC 1939 [https://datatracker.ietf.org/doc/html/rfc1939#section-4] specifies the following:
+
+       Once the POP3 server has determined through the use of any
+       authentication command that the client should be given access to the
+       appropriate maildrop, the POP3 server then acquires an exclusive-
+       access lock on the maildrop, as necessary to prevent messages from
+       being modified or removed before the session enters the UPDATE state.
+       If the lock is successfully acquired, the POP3 server responds with a
+       positive status indicator. The POP3 session now enters the
+       TRANSACTION state, with no messages marked as deleted.
+
+    In other words, when a client has logged in and is connected, no other client can log in using the same username,
+    because if more clients with read-write permissions were connected and were provided the same message set,
+    they could delete the same messages, which could cause an inconsistency of the underlying data source.
+
+    However, not all clients might want to connect to the server to delete messages - some clients might just want
+    to check for new messages and optionally retrieve them. To address this, this server's implementation of the
+    POP3 protocol offers a non-standard POP3 extension which allows a client implementing this non-standard extension
+    to switch its session to the read-only mode.
+
+    The following sections of this document describe the details of this extension.
+
+
+
+2.  "X-POP3SF-READ-ONLY" capability
+
+    CAPA tag:
+       X-POP3SF-READ-ONLY
+
+    Arguments with CAPA tag:
+       none
+
+    Added commands:
+       XPRO
+
+    Standard commands affected:
+       DELE, RSET
+
+    Announced states / possible differences:
+       both / no
+
+    Commands valid in states:
+       AUTHORIZATION
+
+    Specification reference:
+       this document
+
+    Discussion:
+       The X-POP3SF-READ-ONLY capability indicates that the client can issue the XPRO command when in the
+       AUTHORIZATION state to switch the session to read-only mailbox access mode.
+
+
+
+3. "XPRO" command
+
+    XPRO
+
+    Arguments:
+        none
+
+    Restrictions:
+        may only be given in the AUTHORIZATION state
+
+    Discussion:
+        The POP3 server switches the session to the read-only mailbox access mode.
+        If all connected clients with the same username haven't the read-only mailbox access mode enabled, only one
+        session can exist for a specific user at the same time.
+
+        If the POP3 server issues a positive response (+OK), the standard DELE and RSET commands become unavailable
+        after the client authenticates. These commands will always return a negative response and it won't be possible
+        to delete messages from the mailbox. Such negative response will contain the X-POP3SF-READ-ONLY response code.
+
+        If the read-only mailbox access mode isn't allowed on the server, the POP3 server issues a negative response
+        (-ERR) containing the X-POP3SF-READ-ONLY response code.
+
+    Possible Responses:
+        +OK
+        -ERR
+
+    Examples:
+        C: XPRO
+        S: +OK Mailbox access mode switched to read-only
+        ...
+        C: DELE 1
+        S: -ERR [X-POP3SF-READ-ONLY] The mailbox access mode is set to read-only
+        C: RSET
+        S: -ERR [X-POP3SF-READ-ONLY] The mailbox access mode is set to read-only
+
+        C: XPRO
+        S: -ERR [X-POP3SF-READ-ONLY] Read-only mailbox access mode is not allowed
+
+
+
+4.  "X-POP3SF-READ-ONLY" response code
+
+    Complete response code:
+        X-POP3SF-READ-ONLY
+
+    Valid for responses:
+        -ERR
+
+    Valid for commands:
+        XPRO, DELE, RSET
+
+    Response code meaning and expected client behavior:
+        The "X-POP3SF-READ-ONLY" response code indicates that the failure is due to a problem with the read-only
+        mailbox access mode.
+
+        If contained within a response to the XPRO command, it indicates that the read-only mailbox access mode isn't
+        allowed on the server.
+
+        If contained within a response to the DELE or RSET command, it indicates that the client attempted to delete or
+        undelete messages from the mailbox when the session is in the read-only mailbox access mode.
