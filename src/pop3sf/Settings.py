@@ -38,7 +38,7 @@ class Settings:
     """
 
     # If the value of any of these following options is None, such option won't be taken into account when initializing the server.
-    WORKING_DIRECTORY: Optional[str] = "working_dir/"
+    WORKING_DIRECTORY: Optional[str] = "working_dir/"  # If it's a relative path, it's relative to the folder containing the run_pop3sf.sh bash script.
     UMASK: Optional[int] = None  # e.g. 0o077; see https://man7.org/linux/man-pages/man2/umask.2.html
     DROP_ROOT_PRIVILEGES: Optional[Auxiliaries.DropRootPrivilegesInfo] = Auxiliaries.DropRootPrivilegesInfo("nobody", "nogroup")  # This option will only be taken into account when the server gets executed under the root user (uid 0).
 
@@ -86,10 +86,10 @@ class Settings:
         # ])
 
         # from .adapters.DirectorySingleuserAdapter import DirectorySingleuserAdapter
-        # return DirectorySingleuserAdapter("user", '$2b$12$4HAJ3RYUEH1WDVOu/B5qWuNEWxojAz4EjW9WzH7KqY6DwUPHeASZm', "emails_singleuser")  # The bcrypt-hashed password is "password"
+        # return DirectorySingleuserAdapter("user", '$2b$12$4HAJ3RYUEH1WDVOu/B5qWuNEWxojAz4EjW9WzH7KqY6DwUPHeASZm', "emails_singleuser")  # The bcrypt-hashed password is "password"; The directory path is relative to WORKING_DIRECTORY
 
         # from .adapters.DirectoryMultiuserAdapter import DirectoryMultiuserAdapter
-        # return DirectoryMultiuserAdapter("emails_multiuser")
+        # return DirectoryMultiuserAdapter("emails_multiuser")  # The directory path is relative to WORKING_DIRECTORY
 
         # from .adapters.MySQLSingleuserAdapter import MySQLSingleuserAdapter
         # return MySQLSingleuserAdapter("user", '$2b$12$4HAJ3RYUEH1WDVOu/B5qWuNEWxojAz4EjW9WzH7KqY6DwUPHeASZm', MySQLSingleuserAdapter.DatabaseCredentials("user", "pass", "pop3sf"))  # The bcrypt-hashed password is "password"
