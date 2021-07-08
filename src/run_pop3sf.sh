@@ -37,7 +37,7 @@ function activate_venv() {
 # Traverse to the directory where this script is located
 cd -- "$(dirname -- "$0")" || exit_with_error "Failed to traverse into the script's directory"
 
-# Prepare the runtime environment
+# Prepare the environment
 if [ ! -d "./venv" ]; then
   python3 -m venv venv || exit_with_error "Failed to create Python virtual environment"
   activate_venv

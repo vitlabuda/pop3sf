@@ -66,7 +66,7 @@ Then, don't forget to put the adapter to the ``get_adapter()`` method of the [Se
    * **Linux**
    * **Python 3.7+**
    
-   The program was tested on Python 3.7 (Debian 10), Python 3.8 (Ubuntu 20.04) and Python 3.9 (Debian 11).
+   The program was tested in Python 3.7 (Debian 10), Python 3.8 (Ubuntu 20.04) and Python 3.9 (Debian 11).
 
 ### 2. Install the dependencies
    The server requires the ``pip`` and ``venv`` Python 3 packages to be installed.
@@ -85,7 +85,6 @@ Then, don't forget to put the adapter to the ``get_adapter()`` method of the [Se
 
 ### 4. Run the server
    The bash script [run_pop3sf.sh](src/run_pop3sf.sh) creates a virtual environment and downloads the necessary Python libraries if needed, and then runs the program:
-
    ```
    ./run_pop3sf.sh
    ```
