@@ -28,8 +28,8 @@ function exit_with_error() {
   exit 1
 }
 
-function activate_venv() {
-  . ./venv/bin/activate || exit_with_error "Failed to activate Python virtual environment"
+function activate_virtualenv() {
+  . ./virtualenv/bin/activate || exit_with_error "Failed to activate Python virtual environment"
 }
 
 
@@ -38,13 +38,13 @@ function activate_venv() {
 cd -- "$(dirname -- "$0")" || exit_with_error "Failed to traverse into the script's directory"
 
 # Prepare the environment
-if [ ! -d "./venv" ]; then
-  python3 -m venv venv || exit_with_error "Failed to create Python virtual environment"
-  activate_venv
-  ./venv/bin/pip3 install -r requirements.txt > /dev/null || exit_with_error "Failed to install the required Python libraries"
+if [ ! -d "./virtualenv" ]; then
+  virtualenv -p python3 virtualenv > /dev/null || exit_with_error "Failed to create Python virtual environment"
+  activate_virtualenv
+  ./virtualenv/bin/pip3 install -r requirements.txt > /dev/null || exit_with_error "Failed to install the required Python libraries"
 else
-  activate_venv
+  activate_virtualenv
 fi
 
 # Run the program
-./venv/bin/python3 ./pop3sf.py
+./virtualenv/bin/python3 ./pop3sf.py

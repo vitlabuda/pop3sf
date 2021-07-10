@@ -68,13 +68,12 @@ Then, don't forget to put the adapter to the ``get_adapter()`` method of the [Se
    
    The program was tested in Python 3.7 (Debian 10), Python 3.8 (Ubuntu 20.04) and Python 3.9 (Debian 11).
 
+
 ### 2. Install the dependencies
-   The server requires the ``pip`` and ``venv`` Python 3 packages to be installed.
-   
    On Debian/Ubuntu and their derivatives, execute the following:
    ```
    sudo apt update 
-   sudo apt install python3 python3-pip python3-venv
+   sudo apt install python3 python3-pip python3-venv python3-virtualenv virtualenv
    ```
 
 
@@ -102,6 +101,7 @@ Then, don't forget to put the adapter to the ``get_adapter()`` method of the [Se
    sudo systemctl enable pop3sf
    sudo systemctl start pop3sf
    ```
+
 
 
 ## Licensing
