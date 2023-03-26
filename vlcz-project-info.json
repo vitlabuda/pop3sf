@@ -6,5 +6,5 @@
   "priority": 900,
   "category_id": "servers-daemons",
   "category_display_name": "Servers & daemons",
-  "category_priority": 1000
+  "category_priority": 1500
 }
